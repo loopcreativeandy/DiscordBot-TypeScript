@@ -7,13 +7,19 @@ import { Lang } from '../../services/index.js';
 import { InteractionUtils } from '../../utils/index.js';
 import { Command, CommandDeferType } from '../index.js';
 
-export class TestCommand implements Command {
-    public names = [Lang.getRef('chatCommands.test', Language.Default)];
+export class JoinCommand implements Command {
+    public names = ["join"];
     public cooldown = new RateLimiter(1, 5000);
     public deferType = CommandDeferType.PUBLIC;
     public requireClientPerms: PermissionsString[] = [];
 
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
-        await InteractionUtils.send(intr, "Go home! you're drunk!");
+        
+        const role = intr.guild.roles.cache.find(role => role.id === "1049625253845946439");
+        intr.guild.members.addRole({
+            role: role,
+            user: intr.user
+        })
+        await InteractionUtils.send(intr, "Welcome to The Game of Dev <@"+intr.user+">");
     }
 }

@@ -1,4 +1,5 @@
 import {
+    ApplicationCommandOptionType,
     ApplicationCommandType,
     RESTPostAPIChatInputApplicationCommandsJSONBody,
     RESTPostAPIContextMenuApplicationCommandsJSONBody,
@@ -56,6 +57,21 @@ export const ChatCommandMetadata: {
         description: "hands out the role to join the game of dev",
         dm_permission: true,
         default_member_permissions: undefined,
+    },
+    CHECK: {
+        type: ApplicationCommandType.ChatInput,
+        name: "check",
+        description: "checks if your hacker is safe in the current round",
+        dm_permission: true,
+        default_member_permissions: undefined,
+        options: [
+            {
+                name: "mint",
+                description: "the token mint for the hacker NFT",
+                type: ApplicationCommandOptionType.String,
+                required: true,
+            },
+        ],
     },
 };
 

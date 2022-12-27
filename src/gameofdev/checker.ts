@@ -1,6 +1,19 @@
 import { TokenAccountBalancePair } from "@solana/web3.js";
 import { Connection, PublicKey } from "@solana/web3.js";
 
+export async function check(challenge: number, mint: string) : Promise<boolean>{
+    switch(challenge){
+        case 1: 
+            return await checkChallenge1(mint);
+        case 2: 
+            return await checkChallenge2(mint);
+        case 3: 
+            return await checkChallenge3(mint);
+        case 4: 
+            return await checkChallenge4(mint);
+    }
+}
+
 export async function checkChallenge1(nftMint: string) : Promise<boolean>{
     const mint = new PublicKey(nftMint);
     const connection = new Connection("https://api.mainnet-beta.solana.com");
@@ -38,7 +51,25 @@ export async function checkChallenge3(nftMint: string) : Promise<boolean>{
         return false;
     }
     const storedPK = new PublicKey(accointInfo.data.subarray(0,32));
-    const storedSavedFlat = accointInfo.data.readUInt8(32);
+    const storedSaved = accointInfo.data.readUInt8(32);
+
+    return storedPK.equals(hackerMint);
+}
+
+
+export async function checkChallenge4(nftMint: string) : Promise<boolean>{
+    const programId = new PublicKey("CHA4We11FgyPRWHsfQCXnZJYHdHEFLgZ3dK32FquRsFi");
+    const hackerMint = new PublicKey(nftMint);
+    const [pda, bump] = PublicKey.findProgramAddressSync([Buffer.from("CHALLENGE4"), hackerMint.toBytes()], programId);
+
+    const connection = new Connection("https://api.mainnet-beta.solana.com");
+
+    const accointInfo = await connection.getAccountInfo(pda);
+    if (!accointInfo) {
+        return false;
+    }
+    const storedPK = new PublicKey(accointInfo.data.subarray(0,32));
+    const storedSaved = accointInfo.data.readUInt8(32);
 
     return storedPK.equals(hackerMint);
 }

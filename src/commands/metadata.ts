@@ -61,7 +61,7 @@ export const ChatCommandMetadata: {
     CHECK: {
         type: ApplicationCommandType.ChatInput,
         name: "check",
-        description: "checks if your hacker is safe in the current round",
+        description: "checks if your hacker is safe for a given challenge",
         dm_permission: true,
         default_member_permissions: undefined,
         options: [
@@ -69,6 +69,12 @@ export const ChatCommandMetadata: {
                 name: "mint",
                 description: "the token mint for the hacker NFT",
                 type: ApplicationCommandOptionType.String,
+                required: true,
+            },
+            {
+                name: "challenge",
+                description: "the number of the challenge",
+                type: ApplicationCommandOptionType.Integer,
                 required: true,
             },
         ],

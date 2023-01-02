@@ -8,9 +8,11 @@ export async function check(challenge: number, mint: string) : Promise<boolean>{
         case 2: 
             return await checkChallenge2(mint);
         case 3: 
-            return await checkChallenge3(mint);
+        return await checkChallengePDA(mint, "CHA3BXaaQFCMu2RfrXvA1ajMjpvuzkC95EJyVrra8KN2", "CHALLENGE3");
         case 4: 
-            return await checkChallenge4(mint);
+        return await checkChallengePDA(mint, "CHA3BXaaQFCMu2RfrXvA1ajMjpvuzkC95EJyVrra8KN2", "CHALLENGE4");
+        case 5: 
+        return await checkChallengePDA(mint, "Hackr2xnDLpRLBynQcDK6AAsU1NoPjdrfbVNNkZ8xSFe", "CHALLENGE5");
     }
 }
 
@@ -39,10 +41,10 @@ export async function checkChallenge2(nftMint: string) : Promise<boolean>{
     return ta.toBase58().startsWith("TA");
 }
 
-export async function checkChallenge3(nftMint: string) : Promise<boolean>{
-    const programId = new PublicKey("CHA3BXaaQFCMu2RfrXvA1ajMjpvuzkC95EJyVrra8KN2");
+export async function checkChallengePDA(nftMint: string, program: string, prefix: string) : Promise<boolean>{
+    const programId = new PublicKey(program);
     const hackerMint = new PublicKey(nftMint);
-    const [pda, bump] = PublicKey.findProgramAddressSync([Buffer.from("CHALLENGE3"), hackerMint.toBytes()], programId);
+    const [pda, bump] = PublicKey.findProgramAddressSync([Buffer.from(prefix), hackerMint.toBytes()], programId);
 
     const connection = new Connection("https://api.mainnet-beta.solana.com");
 
@@ -56,23 +58,6 @@ export async function checkChallenge3(nftMint: string) : Promise<boolean>{
     return storedPK.equals(hackerMint);
 }
 
-
-export async function checkChallenge4(nftMint: string) : Promise<boolean>{
-    const programId = new PublicKey("CHA4We11FgyPRWHsfQCXnZJYHdHEFLgZ3dK32FquRsFi");
-    const hackerMint = new PublicKey(nftMint);
-    const [pda, bump] = PublicKey.findProgramAddressSync([Buffer.from("CHALLENGE4"), hackerMint.toBytes()], programId);
-
-    const connection = new Connection("https://api.mainnet-beta.solana.com");
-
-    const accointInfo = await connection.getAccountInfo(pda);
-    if (!accointInfo) {
-        return false;
-    }
-    const storedPK = new PublicKey(accointInfo.data.subarray(0,32));
-    const storedSaved = accointInfo.data.readUInt8(32);
-
-    return storedPK.equals(hackerMint);
-}
 
 // const myMint = "DevJEGV6h3eEzNM7RTDc2TzPyxz19E8AhjQwHYsB7MfP";
 // checkChallenge3(myMint);

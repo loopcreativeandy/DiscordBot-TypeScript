@@ -13,6 +13,8 @@ export async function check(challenge: number, mint: string) : Promise<boolean>{
         return await checkChallengePDA(mint, "CHA3BXaaQFCMu2RfrXvA1ajMjpvuzkC95EJyVrra8KN2", "CHALLENGE4");
         case 5: 
         return await checkChallengePDA(mint, "Hackr2xnDLpRLBynQcDK6AAsU1NoPjdrfbVNNkZ8xSFe", "CHALLENGE5");
+        default:
+        return await checkChallengePDA(mint, "CHA3BXaaQFCMu2RfrXvA1ajMjpvuzkC95EJyVrra8KN2", "CHALLENGE"+challenge);
     }
 }
 

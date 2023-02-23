@@ -13,6 +13,8 @@ export async function check(challenge: number, mint: string) : Promise<boolean>{
         return await checkChallengePDA(mint, "CHA3BXaaQFCMu2RfrXvA1ajMjpvuzkC95EJyVrra8KN2", "CHALLENGE4");
         case 5: 
         return await checkChallengePDA(mint, "Hackr2xnDLpRLBynQcDK6AAsU1NoPjdrfbVNNkZ8xSFe", "CHALLENGE5");
+        case 7: 
+        return await checkChallengePDA(mint, "AnChyn46WBUX6VE2EgkQd2XMqBdKAKmGw3znPNzYHjf7", "CHALLENGE7", 8);
         default:
         return await checkChallengePDA(mint, "CHA3BXaaQFCMu2RfrXvA1ajMjpvuzkC95EJyVrra8KN2", "CHALLENGE"+challenge);
     }
@@ -43,7 +45,7 @@ export async function checkChallenge2(nftMint: string) : Promise<boolean>{
     return ta.toBase58().startsWith("TA");
 }
 
-export async function checkChallengePDA(nftMint: string, program: string, prefix: string) : Promise<boolean>{
+export async function checkChallengePDA(nftMint: string, program: string, prefix: string, offset = 0) : Promise<boolean>{
     const programId = new PublicKey(program);
     const hackerMint = new PublicKey(nftMint);
     const [pda, bump] = PublicKey.findProgramAddressSync([Buffer.from(prefix), hackerMint.toBytes()], programId);
@@ -54,8 +56,8 @@ export async function checkChallengePDA(nftMint: string, program: string, prefix
     if (!accointInfo) {
         return false;
     }
-    const storedPK = new PublicKey(accointInfo.data.subarray(0,32));
-    const storedSaved = accointInfo.data.readUInt8(32);
+    const storedPK = new PublicKey(accointInfo.data.subarray(offset+0,offset+32));
+    const storedSaved = accointInfo.data.readUInt8(offset+32);
 
     return storedPK.equals(hackerMint);
 }

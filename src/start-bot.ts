@@ -3,7 +3,7 @@ import { Options, Partials } from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { Button } from './buttons/index.js';
-import { CheckCommand, HelpCommand, InfoCommand, TestCommand } from './commands/chat/index.js';
+import { CheckCommand, HelpCommand, InfoCommand, SignupCommand, TestCommand, VerifyCommand } from './commands/chat/index.js';
 import { JoinCommand } from './commands/chat/join-command.js';
 import {
     ChatCommandMetadata,
@@ -70,6 +70,8 @@ async function start(): Promise<void> {
         // TODO: Add new commands here
         new JoinCommand(),
         new CheckCommand(),
+        new SignupCommand(),
+        new VerifyCommand(),
     ];
 
     // Buttons

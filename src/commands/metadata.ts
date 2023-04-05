@@ -58,6 +58,20 @@ export const ChatCommandMetadata: {
         dm_permission: true,
         default_member_permissions: undefined,
     },
+    VERIFY: {
+        type: ApplicationCommandType.ChatInput,
+        name: "verify",
+        description: "allows for signup and verification",
+        dm_permission: true,
+        default_member_permissions: undefined,
+    },
+    SIGNUP: {
+        type: ApplicationCommandType.ChatInput,
+        name: "signup",
+        description: "provides the link for signup (required for verificaiton)",
+        dm_permission: true,
+        default_member_permissions: undefined,
+    },
     CHECK: {
         type: ApplicationCommandType.ChatInput,
         name: "check",

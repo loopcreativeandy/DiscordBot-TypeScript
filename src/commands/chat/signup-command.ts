@@ -8,29 +8,34 @@ import { InteractionUtils } from '../../utils/index.js';
 import { Command, CommandDeferType } from '../index.js';
 import { check } from "../../solana/gameofdev/checker.js"
 import { P } from 'pino';
+import { buildUrl } from 'build-url-ts';
+import { sign } from 'crypto';
 
-export class CheckCommand implements Command {
-    public names = ["check"];
+export function getSignupURL(userID, userName){
+
+    const signupURL = buildUrl("https://discord-verification-loopcreativeandy.vercel.app", {
+        path: 'signup',
+        queryParams: {
+            uid: userID,
+            name: userName
+        }
+    });
+    return signupURL;
+}
+
+export class SignupCommand implements Command {
+    public names = ["signup"];
     public cooldown = new RateLimiter(1, 5000);
     public deferType = CommandDeferType.PUBLIC;
     public requireClientPerms: PermissionsString[] = [];
 
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
-        let output = "";
-        try{
-            const mint = intr.options.getString("mint", true);
-            const challenge = intr.options.getInteger("challenge", true);
-            output = "Challenge "+challenge+": ";
-            
-            const isSave = await check(challenge, mint);
-            if(isSave){
-                output += "Your Hacker is SAVE!";
-            } else {
-                output += "Your Hacker is NOT save!"
-            }
-        } catch (e) {
-            output = "An error occured! Make sure to provide a valid mint address and challenge id!";
-        }
+
+        const userID = intr.user.id;
+        const userName = intr.user.tag;
+        const signupURL = getSignupURL(userID, userName);
+
+        let output = "Follow this link to sign up: "+signupURL;
         await InteractionUtils.send(intr, output);
     }
 }

@@ -21,8 +21,11 @@ export class VerifyCommand implements Command {
 
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
 
-        const userID = intr.user.id;
-        const userName = intr.user.tag;
+        const otherUser = intr.options.getUser("user", false);
+        const user = otherUser ? otherUser : intr.user;
+
+        const userID = user.id;
+        const userName = user.tag;
 
         let output;
         const verified = await verify(userID);
@@ -34,9 +37,9 @@ export class VerifyCommand implements Command {
             const role = intr.guild.roles.cache.find(role => role.id === "1093208675935604887");
             intr.guild.members.addRole({
                 role: role,
-                user: intr.user
+                user: user
             })
-            output = "Thank you "+userName+"! You are successfully verified! (devnet)"
+            output = "Thank you <@"+user+">! You are successfully verified! (devnet)"
         }
         await InteractionUtils.send(intr, output);
     }

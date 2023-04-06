@@ -64,6 +64,14 @@ export const ChatCommandMetadata: {
         description: "allows for signup and verification",
         dm_permission: true,
         default_member_permissions: undefined,
+        options: [
+            {
+                name: "user",
+                description: "verify someone else than yourself",
+                type: ApplicationCommandOptionType.User,
+                required: false,
+            },
+        ]
     },
     SIGNUP: {
         type: ApplicationCommandType.ChatInput,
